@@ -2,7 +2,10 @@ package com.example.osprojectfinal;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -20,15 +23,16 @@ public class RegisterActivity extends AppCompatActivity {
     Spinner position;
     Button register;
 
-
     ArrayList<String> ids = new ArrayList<>();
 
+
+    SQLiteDatabase database ;
     int idGenerated = 0;
     int max = 1;
     int min = 0;
     private static int counterMid = 0;
     String startMid = "";
-    String finalId = "";
+    int finalId = 0;
     int index =0;
 
     SQLDBHelper db;
@@ -46,6 +50,7 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
+        insertDatabase();
 
         firstName = findViewById(R.id.etFirstName);
         lastName = findViewById(R.id.etLastName);
@@ -62,6 +67,9 @@ public class RegisterActivity extends AppCompatActivity {
         db = SQLDBHelper.getInstance(getApplicationContext());
         lstUser = db.getAllUsers();
 
+
+        database = openOrCreateDatabase("mydb", Context.MODE_PRIVATE, null);
+        database.execSQL("CREATE TABLE IF NOT EXISTS counter (id NUMBER, value NUMBER);");
 
         register.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,7 +108,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void allWork()
     {
-
+        User u = new User();
 
 
         String positionStr = position.getSelectedItem().toString();
@@ -164,35 +172,65 @@ public class RegisterActivity extends AppCompatActivity {
 //        ids.add("q");
 //        ids.add("q");
 //        ids.add("q");
+
+        counterMid = getValueDatabase ();
                         if (positionStr.equals("Mid-Level")) {
+                            if ( counterMid<201) {
 
-                            if (true){
-                                Random rand = new Random();
-                                idGenerated = rand.nextInt((max-min+1)+min);
-                                finalId =  "20"+ String.valueOf(idGenerated);
-                                ids.add("q");
-                                for(int i=0;i<3;++i)
-                                {
-                                    if (!finalId.equals(ids.get(i))){
-                                        ids.add(finalId);
-                                        //u.setId(finalId);
-                                        Toast.makeText(RegisterActivity.this,ids.get(index), Toast.LENGTH_SHORT).show();
-                                        counterMid++;
-                                        //break;
-                                    }
-                                    else {
-                                        idGenerated = rand.nextInt((max-min+1)+min);
-                                        finalId =  "20" + String.valueOf(idGenerated);
-                                        Toast.makeText(RegisterActivity.this,"yama", Toast.LENGTH_SHORT).show();
-                                    }
-
+                                if (counterMid == 0) {
+                                    finalId = 200;
+                                    u.setId(finalId);
+                                    updateDatabase(counterMid);
+                                    counterMid = getValueDatabase ();
+                                } else {
+                                    finalId++;
+                                    u.setId(finalId);
+                                    updateDatabase(counterMid);
+                                    counterMid = getValueDatabase ();
                                 }
+                        }
+                        else {
+                            Toast.makeText(RegisterActivity.this, "Full ya khaye", Toast.LENGTH_SHORT).show();
+                            finish();
+                        }
 
 
-                            }
-                            else {
-                                Toast.makeText(RegisterActivity.this, "DB Full", Toast.LENGTH_SHORT).show();
-                            }
+//                            if (counterMid<=1) {
+//                                Random rand = new Random();
+//                                idGenerated = rand.nextInt((max - min + 1) + min);
+//                                finalId = "20" + String.valueOf(idGenerated);
+//
+//                                if (ids.isEmpty()) {
+//                                    //ids.add(finalId);
+//                                    u.setId(finalId);
+//                                    counterMid++;
+//                                } else if (!ids.isEmpty()) {
+//
+//
+//                                    for (int i = 0; i < ids.size(); ++i) {
+//                                        if (finalId.equals(ids.get(i))) {
+//                                            idGenerated = rand.nextInt((max - min + 1) + min);
+//                                            finalId = "20" + String.valueOf(idGenerated);
+//                                        }
+//                                        else {
+//                                            break;
+//                                        }
+//                                    }
+//                                    u.setId(finalId);
+//                                    //ids.add(finalId);
+//                                    Toast.makeText(RegisterActivity.this, ids.get(index), Toast.LENGTH_SHORT).show();
+//                                    counterMid++;
+//
+//                                }
+//
+//
+//                            }
+//                            else
+//                            {
+//
+//                                Toast.makeText(RegisterActivity.this, "DB Full", Toast.LENGTH_SHORT).show();
+//                                finish();
+//                            }
 
 
 
@@ -255,7 +293,7 @@ public class RegisterActivity extends AppCompatActivity {
 //            }
 //        }
 
-        User u = new User();
+
         //u.setId();
         u.setFirstName(firstName.getText().toString());
         u.setLastName(lastName.getText().toString());
@@ -271,8 +309,8 @@ public class RegisterActivity extends AppCompatActivity {
                 !address.getText().toString().equals("") && !username.getText().toString().equals("") && !password.getText().toString().equals("") && !confirmPassword.getText().toString().equals("")) {
             if (password.getText().toString().equals(confirmPassword.getText().toString())) {
                 if (!checkUser(u)) {
-                        //db.insertUser(u);
-                        Toast.makeText(getApplicationContext(), "User has been added!", Toast.LENGTH_LONG).show();
+                        db.insertUser(u);
+                        //Toast.makeText(getApplicationContext(), "User has been added!", Toast.LENGTH_LONG).show();
 //                        Intent i = new Intent(getApplicationContext(), LoginActivity.class);
 //                        i.putExtra("username",username.getText().toString());
 //                        i.putExtra("password",password.getText().toString());
@@ -287,6 +325,22 @@ public class RegisterActivity extends AppCompatActivity {
         } else {
             Toast.makeText(getApplicationContext(), "All fields are required!", Toast.LENGTH_LONG).show();
         }
+    }
+
+    public void updateDatabase (int value){
+        database.execSQL("UPDATE counter SET value = '"+ value +"' WHERE id = '"+1+"'");
+    }
+    public void insertDatabase (){
+        database.execSQL("INSERT INTO counter VALUES (1, 0)");
+    }
+    public int getValueDatabase(){
+       Cursor c  =  database.rawQuery("SELECT value FROM counter WHERE id = '"+1+"'",null);
+       if (c.moveToFirst()){
+           int i  = c.getInt(0);
+           return i;
+       }
+
+       return -1;
     }
 
 }

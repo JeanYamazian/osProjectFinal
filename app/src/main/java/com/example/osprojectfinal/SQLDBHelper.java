@@ -39,6 +39,7 @@ public class SQLDBHelper extends SQLiteOpenHelper {
         super(context,DATABASE_NAME,null,DATABASE_VERSION);
     }
 
+
     public static synchronized SQLDBHelper getInstance(Context context) {
         if(instance == null)
         {
@@ -136,7 +137,7 @@ public class SQLDBHelper extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             do {
                 User u = new User();
-                u.setId(cursor.getString((int)cursor.getColumnIndex(COLUMN_USER_ID)));
+                u.setId(cursor.getInt((int)cursor.getColumnIndex(COLUMN_USER_ID)));
                 u.setFirstName(cursor.getString((int)cursor.getColumnIndex(COLUMN_FIRST_NAME)));
                 u.setLastName(cursor.getString((int)cursor.getColumnIndex(COLUMN_LAST_NAME)));
                 u.setEmail(cursor.getString((int)cursor.getColumnIndex(COLUMN_EMAIL)));
@@ -151,6 +152,22 @@ public class SQLDBHelper extends SQLiteOpenHelper {
         }
         cursor.close();
         return usersList;
+    }
+
+
+    public static boolean getUsersId(String id) {
+//        ArrayList<User> userIdList = new ArrayList<>();
+//        db = getReadableDatabase();
+//        Cursor cursor = db.rawQuery("SELECT * FROM " + TBL_USERS + "WHERE COLUMN_USER_ID = "+id, null);
+//        Cursor c = db.rawQuery("SELECT * FROM TBL_USERS WHERE COLUMN_USER_ID = " +id,null);
+//
+//        while (c.moveToNext()){
+//            if (c.moveToFirst()) {
+//                return false;
+//            }
+//
+//        }
+       return true;
     }
 
     @Override

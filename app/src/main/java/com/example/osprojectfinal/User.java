@@ -2,14 +2,15 @@ package com.example.osprojectfinal;
 
 public class User {
 
-    String firstName, lastName, email, address, position, username, id, password,membership_id;
+    String firstName, lastName, email, address, position, username, password,membership_id;
     String phoneNumber;
     long priorityLevel;
+    int id;
 
     public User() {
     }
 
-    public User(String firstName, String lastName, String email, String phoneNumber, String address, String position, String id, int priorityLevel, String username, String password) {
+    public User(String firstName, String lastName, String email, String phoneNumber, String address, String position, int id, int priorityLevel, String username, String password) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -71,7 +72,7 @@ public class User {
         this.phoneNumber = phoneNumber;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -95,7 +96,7 @@ public class User {
         return phoneNumber;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
