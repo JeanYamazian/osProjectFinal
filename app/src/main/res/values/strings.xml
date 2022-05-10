@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">osProjectFinal</string>
+    <string-array name="positions">
+        <item>Entry-Level</item>
+        <item>Mid-Level</item>
+        <item>Senior-Level</item>
+    </string-array>
+</resources>
