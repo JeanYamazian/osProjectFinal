@@ -19,7 +19,7 @@ import java.util.Random;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    EditText firstName, lastName, email, phoneNumber, address, username, password, confirmPassword;
+    EditText firstName, lastName, email, phoneNumber, address, username, password, confirmPassword,idNumber;
     Spinner position;
     Button register;
 
@@ -50,8 +50,9 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        insertDatabase();
+        //insertDatabase();
 
+        idNumber = findViewById(R.id.etId);
         firstName = findViewById(R.id.etFirstName);
         lastName = findViewById(R.id.etLastName);
         email = findViewById(R.id.etEmail);
@@ -63,6 +64,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         position = findViewById(R.id.spPositions);
         register = findViewById(R.id.btRegister);
+
 
         db = SQLDBHelper.getInstance(getApplicationContext());
         lstUser = db.getAllUsers();
@@ -78,6 +80,23 @@ public class RegisterActivity extends AppCompatActivity {
 
 
     }
+
+//    private boolean checkUserId(User u)
+//    {
+//
+//        boolean exist = false;
+//
+//        for(int i=0;i<lstUser.size();++i)
+//        {
+//            User user = (User) lstUser.get(i);
+//            if(user.id.equals(user.getId()))
+//            {
+//                exist =  true;
+//                break;
+//            }
+//        }
+//        return exist;
+//    }
 
     private boolean checkUser(User user) {
         boolean userResult = false;
@@ -113,185 +132,29 @@ public class RegisterActivity extends AppCompatActivity {
 
         String positionStr = position.getSelectedItem().toString();
 
-//            Random rand = new Random();
-//            userId = String.valueOf(rand.nextInt(max - min + 1) + min);
-//
-//
-//
-//            String tempStr = String.valueOf(rand.nextInt(max - min + 1) + min);
 
-
-//                    if (positionStr.equals("Entry-Level")) {
-//                        int min = 100;
-//                        int max = 199;
-//                        Random rng = new Random(); // Ideally just create one instance globally
-//                        List<String> generated = new ArrayList<String>();
-//                        for (int i = 0; i < lstUser.size(); i++)
-//                        {
-//                            while(true)
-//                            {
-//                                String nexttt = String.valueOf(rng.nextInt(max - min + 1) + min);
-//                                if (!generated.contains(next))
-//                                {
-//                                    // Done for this iteration
-//                                    generated.add(nexttt);
-//                                    break;
-//                                }
-//                            }
-//                        }
-//                    }
-//                    else
-
-
-
-//
-//        int min = 200;
-//        int max = 202;
-//        Random rng = new Random(); // Ideally just create one instance globally
-//
-//
-//        List<Integer> generated = new ArrayList<Integer>();
-//
-//        while(true)
+//        if(checkUserId(u))
 //        {
-//            next = rng.nextInt(max - min + 1) + min;
-//            if (!generated.contains(next))
+//            for(int i=0;i<lstUser.size();++i)
 //            {
-//                // Done for this iteration
-//                generated.add(next);
-//                userId.equals(String.valueOf(next));
-//                break;
-//            }
-//            else
-//            {
-//                Toast.makeText(getApplicationContext(), "Unable to insert user!", Toast.LENGTH_LONG).show();
-//            }
-//        }
-
-//    ids.add("q");
-//        ids.add("q");
-//        ids.add("q");
-//        ids.add("q");
-
-        counterMid = getValueDatabase ();
-                        if (positionStr.equals("Mid-Level")) {
-                            if ( counterMid<201) {
-
-                                if (counterMid == 0) {
-                                    finalId = 200;
-                                    u.setId(finalId);
-                                    updateDatabase(counterMid);
-                                    counterMid = getValueDatabase ();
-                                } else {
-                                    finalId++;
-                                    u.setId(finalId);
-                                    updateDatabase(counterMid);
-                                    counterMid = getValueDatabase ();
-                                }
-                        }
-                        else {
-                            Toast.makeText(RegisterActivity.this, "Full ya khaye", Toast.LENGTH_SHORT).show();
-                            finish();
-                        }
-
-
-//                            if (counterMid<=1) {
-//                                Random rand = new Random();
-//                                idGenerated = rand.nextInt((max - min + 1) + min);
-//                                finalId = "20" + String.valueOf(idGenerated);
-//
-//                                if (ids.isEmpty()) {
-//                                    //ids.add(finalId);
-//                                    u.setId(finalId);
-//                                    counterMid++;
-//                                } else if (!ids.isEmpty()) {
+//                if (positionStr.equals("Entry-Level")) {
 //
 //
-//                                    for (int i = 0; i < ids.size(); ++i) {
-//                                        if (finalId.equals(ids.get(i))) {
-//                                            idGenerated = rand.nextInt((max - min + 1) + min);
-//                                            finalId = "20" + String.valueOf(idGenerated);
-//                                        }
-//                                        else {
-//                                            break;
-//                                        }
-//                                    }
-//                                    u.setId(finalId);
-//                                    //ids.add(finalId);
-//                                    Toast.makeText(RegisterActivity.this, ids.get(index), Toast.LENGTH_SHORT).show();
-//                                    counterMid++;
-//
-//                                }
+//                } else if (positionStr.equals("Mid-Level")) {
 //
 //
-//                            }
-//                            else
-//                            {
+//                } else if (positionStr.equals("Senior-Level")) {
 //
-//                                Toast.makeText(RegisterActivity.this, "DB Full", Toast.LENGTH_SHORT).show();
-//                                finish();
-//                            }
-
-
-
-
-                    }
-//                    else  if (positionStr.equals("Senior-Level")) {
-//                        int min = 100;
-//                        int max = 199;
-//                        Random rng = new Random(); // Ideally just create one instance globally
-//                        List<String> generated = new ArrayList<String>();
-//                        for (int i = 0; i < lstUser.size(); i++)
-//                        {
-//                            while(true)
-//                            {
-//                                String nextt = String.valueOf(rng.nextInt(max - min + 1) + min);
-//                                if (!generated.contains(next))
-//                                {
-//                                    // Done for this iteration
-//                                    generated.add(nextt);
-//                                    break;
-//                                }
-//                            }
-//                        }
 //
-//                    }
-
-//        class SelectedRandomNumberBetweenRangeNoDuplicate {
-//
-//            public void main(String[] args) {
-//
-//                //Select Eight random number without duplicate between 0 and 50
-//                ArrayList list = getRandomNonRepeatingIntegers(lstUser.size(), min, max);
-//                for (int i = 0; i < list.size(); i++) {
-//                    userId = String.valueOf(list.get(i));
 //                }
 //            }
-//
-//            //Get selected size number without duplicate
-//            public ArrayList getRandomNonRepeatingIntegers(int size, int min, int max)
-//            {
-//
-//
-//            }
 //        }
-
-
-
-
-//        for(int i=0;i<lstUser.size();++i)
+//        else
 //        {
-//            if (positionStr.equals("Entry-Level")) {
-//                userId = String.valueOf(entryLevel++);
-//
-//            } else if (positionStr.equals("Mid-Level")) {
-//                userId = String.valueOf(midLevel++);
-//
-//            } else if (positionStr.equals("Senior-Level")) {
-//                userId = String.valueOf(seniorLevel++);
-//
-//            }
+//            Random rand = new Random();
+//            u.setId(String.valueOf(rand.nextInt(max-min+1)+min));
 //        }
+
 
 
         //u.setId();
@@ -326,21 +189,21 @@ public class RegisterActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "All fields are required!", Toast.LENGTH_LONG).show();
         }
     }
-
-    public void updateDatabase (int value){
-        database.execSQL("UPDATE counter SET value = '"+ value +"' WHERE id = '"+1+"'");
-    }
-    public void insertDatabase (){
-        database.execSQL("INSERT INTO counter VALUES (1, 0)");
-    }
-    public int getValueDatabase(){
-       Cursor c  =  database.rawQuery("SELECT value FROM counter WHERE id = '"+1+"'",null);
-       if (c.moveToFirst()){
-           int i  = c.getInt(0);
-           return i;
-       }
-
-       return -1;
-    }
+//
+//    public void updateDatabase (int value){
+//        database.execSQL("UPDATE counter SET value = '"+ value +"' WHERE id = '"+1+"'");
+//    }
+//    public void insertDatabase (){
+//        database.execSQL("INSERT INTO counter VALUES (1, 0)");
+//    }
+//    public int getValueDatabase(){
+//       Cursor c  =  database.rawQuery("SELECT value FROM counter WHERE id = '"+1+"'",null);
+//       if (c.moveToFirst()){
+//           int i  = c.getInt(0);
+//           return i;
+//       }
+//
+//       return -1;
+//    }
 
 }

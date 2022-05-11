@@ -137,7 +137,7 @@ public class SQLDBHelper extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             do {
                 User u = new User();
-                u.setId(cursor.getInt((int)cursor.getColumnIndex(COLUMN_USER_ID)));
+                u.setId(cursor.getString((int)cursor.getColumnIndex(COLUMN_USER_ID)));
                 u.setFirstName(cursor.getString((int)cursor.getColumnIndex(COLUMN_FIRST_NAME)));
                 u.setLastName(cursor.getString((int)cursor.getColumnIndex(COLUMN_LAST_NAME)));
                 u.setEmail(cursor.getString((int)cursor.getColumnIndex(COLUMN_EMAIL)));
