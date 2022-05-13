@@ -1,16 +1,19 @@
 package com.example.osprojectfinal;
 
-public class User {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class User implements Parcelable {
 
     String firstName, lastName, email, address, position, username, password,membership_id;
     String phoneNumber;
-    long priorityLevel;
+    String priorityLevel;
     String id;
 
     public User() {
     }
 
-    public User(String firstName, String lastName, String email, String phoneNumber, String address, String position, String id, int priorityLevel, String username, String password) {
+    public User(String firstName, String lastName, String email, String phoneNumber, String address, String position, String id, String priorityLevel, String username, String password) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -23,6 +26,32 @@ public class User {
         this.priorityLevel = priorityLevel;
 
     }
+
+    protected User(Parcel in) {
+        firstName = in.readString();
+        lastName = in.readString();
+        email = in.readString();
+        address = in.readString();
+        position = in.readString();
+        username = in.readString();
+        password = in.readString();
+        membership_id = in.readString();
+        phoneNumber = in.readString();
+        priorityLevel = in.readString();
+        id = in.readString();
+    }
+
+    public static final Creator<User> CREATOR = new Creator<User>() {
+        @Override
+        public User createFromParcel(Parcel in) {
+            return new User(in);
+        }
+
+        @Override
+        public User[] newArray(int size) {
+            return new User[size];
+        }
+    };
 
     public String getFirstName() {
         return firstName;
@@ -76,7 +105,7 @@ public class User {
         this.id = id;
     }
 
-    public void setPriorityLevel(int priorityLevel) {
+    public void setPriorityLevel(String priorityLevel) {
         this.priorityLevel = priorityLevel;
     }
 
@@ -100,7 +129,27 @@ public class User {
         return id;
     }
 
-    public long getPriorityLevel() {
+    public String getPriorityLevel() {
         return priorityLevel;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(firstName);
+        parcel.writeString(lastName);
+        parcel.writeString(email);
+        parcel.writeString(address);
+        parcel.writeString(position);
+        parcel.writeString(username);
+        parcel.writeString(password);
+        parcel.writeString(membership_id);
+        parcel.writeString(phoneNumber);
+        parcel.writeString(priorityLevel);
+        parcel.writeString(id);
     }
 }

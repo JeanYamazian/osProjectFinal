@@ -15,10 +15,11 @@ public class SQLDBHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
 
     private final static String TBL_USERS = "TBL_USERS";
-    private final static String COLUMN_USER_ID = "COLUMN_USER_ID";
+    private final static String COLUMN_USER_ID = "USER_ID";
     private final static String COLUMN_USERNAME = "USER_USERNAME";
     private final static String COLUMN_FIRST_NAME = "USER_FIRST_NAME";
     private final static String COLUMN_LAST_NAME = "USER_LAST_NAME";
+    private final static String COLUMN_USER_PRIORITY = "USER_PRIORITY";
     private final static String COLUMN_PASSWORD = "USER_PASSWORD";
     private final static String COLUMN_EMAIL = "USER_EMAIL";
     private final static String COLUMN_ADDRESS = "USER_ADDRESS";
@@ -32,7 +33,6 @@ public class SQLDBHelper extends SQLiteOpenHelper {
     private final static String COLUMN_IO_INFORMATION = "COLUMN_IO_INFORMATION";
 
     private SQLiteDatabase db;
-
     private static SQLDBHelper instance;
 
     public SQLDBHelper(Context context) {
@@ -52,7 +52,7 @@ public class SQLDBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         this.db = db;
 
-        final String SQL_CREATE_TABLE_USER = " CREATE TABLE " + TBL_USERS + " ( " + COLUMN_USER_ID + " TEXT, " + COLUMN_USERNAME + " TEXT, " + COLUMN_FIRST_NAME + " TEXT, " + COLUMN_LAST_NAME + " TEXT, " + COLUMN_EMAIL + " TEXT, " + COLUMN_PHONE_NUMBER + " TEXT, " +
+        final String SQL_CREATE_TABLE_USER = " CREATE TABLE " + TBL_USERS + " ( " + COLUMN_USER_ID + " TEXT, " + COLUMN_USERNAME + " TEXT, " + COLUMN_FIRST_NAME + " TEXT, " + COLUMN_LAST_NAME + " TEXT, " + COLUMN_USER_PRIORITY + " TEXT, " + COLUMN_EMAIL + " TEXT, " + COLUMN_PHONE_NUMBER + " TEXT, " +
                 COLUMN_ADDRESS + " TEXT, " + COLUMN_POSITION + " TEXT, " + COLUMN_PASSWORD + " TEXT " + " ) ";
 
         final String SQL_CREATE_TABLE_PROCESS = " CREATE TABLE " + TBL_PROCESS + " ( " + COLUMN_PROCESS_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -71,6 +71,7 @@ public class SQLDBHelper extends SQLiteOpenHelper {
         cv.put(COLUMN_USERNAME,u.getUsername());
         cv.put(COLUMN_FIRST_NAME,u.getFirstName());
         cv.put(COLUMN_LAST_NAME,u.getLastName());
+        cv.put(COLUMN_USER_PRIORITY,u.getPriorityLevel());
         cv.put(COLUMN_EMAIL,u.getEmail());
         cv.put(COLUMN_PHONE_NUMBER,u.getPhoneNumber());
         cv.put(COLUMN_ADDRESS,u.getAddress());
@@ -140,6 +141,7 @@ public class SQLDBHelper extends SQLiteOpenHelper {
                 u.setId(cursor.getString((int)cursor.getColumnIndex(COLUMN_USER_ID)));
                 u.setFirstName(cursor.getString((int)cursor.getColumnIndex(COLUMN_FIRST_NAME)));
                 u.setLastName(cursor.getString((int)cursor.getColumnIndex(COLUMN_LAST_NAME)));
+                u.setPriorityLevel(cursor.getString((int)cursor.getColumnIndex(COLUMN_USER_PRIORITY)));
                 u.setEmail(cursor.getString((int)cursor.getColumnIndex(COLUMN_EMAIL)));
                 u.setAddress(cursor.getString((int)cursor.getColumnIndex(COLUMN_ADDRESS)));
                 u.setPhoneNumber(cursor.getString((int)cursor.getColumnIndex(COLUMN_PHONE_NUMBER)));
@@ -153,22 +155,26 @@ public class SQLDBHelper extends SQLiteOpenHelper {
         cursor.close();
         return usersList;
     }
+    public ArrayList<Process> getAllProcesses() {
+        ArrayList<Process> processList = new ArrayList<>();
+        db = getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TBL_PROCESS, null);
 
-
-    public static boolean getUsersId(String id) {
-//        ArrayList<User> userIdList = new ArrayList<>();
-//        db = getReadableDatabase();
-//        Cursor cursor = db.rawQuery("SELECT * FROM " + TBL_USERS + "WHERE COLUMN_USER_ID = "+id, null);
-//        Cursor c = db.rawQuery("SELECT * FROM TBL_USERS WHERE COLUMN_USER_ID = " +id,null);
-//
-//        while (c.moveToNext()){
-//            if (c.moveToFirst()) {
-//                return false;
-//            }
-//
-//        }
-       return true;
+        if (cursor.moveToFirst()) {
+            do {
+                Process p = new Process();
+                p.setId(cursor.getString( (int) cursor.getColumnIndex(COLUMN_PROCESS_ID)));
+                p.setPriority(cursor.getString( (int) cursor.getColumnIndex(COLUMN_PRIORITY)));
+                p.setState(cursor.getString((int)cursor.getColumnIndex(COLUMN_STATE)));
+                p.setIoInformation(cursor.getString((int)cursor.getColumnIndex(COLUMN_IO_INFORMATION)));
+                processList.add(p);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return processList;
     }
+
+
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
@@ -183,3 +189,4 @@ public class SQLDBHelper extends SQLiteOpenHelper {
         db.setForeignKeyConstraintsEnabled(true);
     }
 }
+

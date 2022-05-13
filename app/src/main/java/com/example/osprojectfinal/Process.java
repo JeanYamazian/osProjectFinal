@@ -2,10 +2,10 @@ package com.example.osprojectfinal;
 
 public class Process {
 
-    int id, priority;
+    String id, priority;
     String state, ioInformation;
 
-    public Process(int id, int priority, String state, String ioInformation) {
+    public Process(String id, String priority, String state, String ioInformation) {
         this.id = id;
         this.priority = priority;
         this.state = state;
@@ -15,19 +15,19 @@ public class Process {
     public Process() {
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public int getPriority() {
+    public String getPriority() {
         return priority;
     }
 
-    public void setPriority(int priority) {
+    public void setPriority(String priority) {
         this.priority = priority;
     }
 

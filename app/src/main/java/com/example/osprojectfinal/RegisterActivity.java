@@ -167,7 +167,7 @@ public class RegisterActivity extends AppCompatActivity {
 
 
         if (u.getId() != null) {
-            int priority = getPriority (u.getId());
+            String priority = String.valueOf(getPriority (u.getId()));
             u.setFirstName(firstName.getText().toString());
             u.setLastName(lastName.getText().toString());
             u.setEmail(email.getText().toString());

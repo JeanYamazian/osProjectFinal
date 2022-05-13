@@ -31,20 +31,24 @@ public class LoginActivity extends AppCompatActivity {
         passwordTxtV = findViewById(R.id.password);
         loginBtn = findViewById(R.id.LoginBTN);
 
-        db = SQLDBHelper.getInstance(getApplicationContext());
-
-        lstUser = db.getAllUsers();
-
-        Bundle b = getIntent().getExtras();
-        if(b!=null)
-        {
-            usernamTxtV.setText(b.getString("username"));
-            passwordTxtV.setText(b.getString("password"));
-        }
+//        db = SQLDBHelper.getInstance(getApplicationContext());
+//
+//        lstUser = db.getAllUsers();
+//
+//        Bundle b = getIntent().getExtras();
+//        if(b!=null)
+//        {
+//            usernamTxtV.setText(b.getString("username"));
+//            passwordTxtV.setText(b.getString("password"));
+//        }
 
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                db = SQLDBHelper.getInstance(getApplicationContext());
+                lstUser = db.getAllUsers();
+
                 User u = new User();
 
                 if(!usernamTxtV.getText().toString().equals("") && !passwordTxtV.getText().toString().equals(""))
@@ -62,9 +66,10 @@ public class LoginActivity extends AppCompatActivity {
                         if(user.getUsername().equals(usernamTxtV.getText().toString()) && user.getPassword().equals(passwordTxtV.getText().toString()))
                         {
                             userCheck = true;
-                            Intent intent  = new Intent(getApplicationContext(),MainActivity.class);
+                            Intent intent  = new Intent(getApplicationContext(), PrintActivity.class);
+                            intent.putExtra("USER", user);
                             startActivity(intent);
-                            break;
+                            finish();
                         }
                     }
 
@@ -77,9 +82,6 @@ public class LoginActivity extends AppCompatActivity {
                 {
                     Toast.makeText(getApplicationContext(),"Both fields are required",Toast.LENGTH_LONG).show();
                 }
-
-
-
             }
         });
 
@@ -108,3 +110,4 @@ public class LoginActivity extends AppCompatActivity {
         return userCheck;
     }
 }
+
