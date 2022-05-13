@@ -14,23 +14,23 @@ public class SQLDBHelper extends SQLiteOpenHelper {
     private final static String DATABASE_NAME = "MY_DATABASE";
     private static final int DATABASE_VERSION = 1;
 
-    private final static String TBL_USERS = "TBL_USERS";
+    private final static String TBL_USERS = "USERS_TBL";
     private final static String COLUMN_USER_ID = "USER_ID";
-    private final static String COLUMN_USERNAME = "USER_USERNAME";
-    private final static String COLUMN_FIRST_NAME = "USER_FIRST_NAME";
-    private final static String COLUMN_LAST_NAME = "USER_LAST_NAME";
-    private final static String COLUMN_USER_PRIORITY = "USER_PRIORITY";
-    private final static String COLUMN_PASSWORD = "USER_PASSWORD";
-    private final static String COLUMN_EMAIL = "USER_EMAIL";
-    private final static String COLUMN_ADDRESS = "USER_ADDRESS";
-    private final static String COLUMN_PHONE_NUMBER = "USER_PHONE_NUMBER";
-    private final static String COLUMN_POSITION = "USER_POSITION";
+    private final static String COLUMN_USERNAME = "USERNAME";
+    private final static String COLUMN_FIRST_NAME = "FIRST_NAME";
+    private final static String COLUMN_LAST_NAME = "LAST_NAME";
+    private final static String COLUMN_LEVEL_PRIORITY = "LEVEL_PRIORITY";
+    private final static String COLUMN_PASSWORD = "PASSWORD";
+    private final static String COLUMN_EMAIL = "EMAIL_ADDRESS";
+    private final static String COLUMN_ADDRESS = "ADDRESS_LOCATION";
+    private final static String COLUMN_PHONE_NUMBER = "PHONE_NUMBER";
+    private final static String COLUMN_POSITION = "POSITION";
 
-    private final static String TBL_PROCESS = "TBL_PROCESS";
-    private final static String COLUMN_PROCESS_ID = "COLUMN_PROCESS_ID";
-    private final static String COLUMN_PRIORITY = "COLUMN_PRIORITY";
-    private final static String COLUMN_STATE= "COLUMN_STATE";
-    private final static String COLUMN_IO_INFORMATION = "COLUMN_IO_INFORMATION";
+    private final static String TBL_PROCESS = "PROCESS_TBL";
+    private final static String COLUMN_PROCESS_ID = "PROCESS_ID";
+    private final static String COLUMN_PRIORITY = "PRIORITY";
+    private final static String COLUMN_STATE= "STATE";
+    private final static String COLUMN_IO_INFORMATION = "IO_INFORMATION";
 
     private SQLiteDatabase db;
     private static SQLDBHelper instance;
@@ -52,8 +52,8 @@ public class SQLDBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         this.db = db;
 
-        final String SQL_CREATE_TABLE_USER = " CREATE TABLE " + TBL_USERS + " ( " + COLUMN_USER_ID + " TEXT, " + COLUMN_USERNAME + " TEXT, " + COLUMN_FIRST_NAME + " TEXT, " + COLUMN_LAST_NAME + " TEXT, " + COLUMN_USER_PRIORITY + " TEXT, " + COLUMN_EMAIL + " TEXT, " + COLUMN_PHONE_NUMBER + " TEXT, " +
-                COLUMN_ADDRESS + " TEXT, " + COLUMN_POSITION + " TEXT, " + COLUMN_PASSWORD + " TEXT " + " ) ";
+        final String SQL_CREATE_TABLE_USER = " CREATE TABLE " + TBL_USERS + " ( " + COLUMN_USER_ID + " INTEGER PRIMARY KEY, " + COLUMN_USERNAME + " TEXT, " + COLUMN_PASSWORD + " TEXT, " + COLUMN_FIRST_NAME + " TEXT, " + COLUMN_LAST_NAME + " TEXT, " +  COLUMN_EMAIL + " TEXT, " + COLUMN_PHONE_NUMBER + " TEXT, " +
+                COLUMN_ADDRESS + " TEXT, " + COLUMN_LEVEL_PRIORITY + " TEXT, "  + COLUMN_POSITION + " TEXT " +" ) ";
 
         final String SQL_CREATE_TABLE_PROCESS = " CREATE TABLE " + TBL_PROCESS + " ( " + COLUMN_PROCESS_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + COLUMN_PRIORITY + " TEXT, " + COLUMN_STATE + " TEXT, " + COLUMN_IO_INFORMATION + " TEXT " + " ) ";
@@ -71,7 +71,7 @@ public class SQLDBHelper extends SQLiteOpenHelper {
         cv.put(COLUMN_USERNAME,u.getUsername());
         cv.put(COLUMN_FIRST_NAME,u.getFirstName());
         cv.put(COLUMN_LAST_NAME,u.getLastName());
-        cv.put(COLUMN_USER_PRIORITY,u.getPriorityLevel());
+        cv.put(COLUMN_LEVEL_PRIORITY,u.getPriorityLevel());
         cv.put(COLUMN_EMAIL,u.getEmail());
         cv.put(COLUMN_PHONE_NUMBER,u.getPhoneNumber());
         cv.put(COLUMN_ADDRESS,u.getAddress());
@@ -141,7 +141,7 @@ public class SQLDBHelper extends SQLiteOpenHelper {
                 u.setId(cursor.getString((int)cursor.getColumnIndex(COLUMN_USER_ID)));
                 u.setFirstName(cursor.getString((int)cursor.getColumnIndex(COLUMN_FIRST_NAME)));
                 u.setLastName(cursor.getString((int)cursor.getColumnIndex(COLUMN_LAST_NAME)));
-                u.setPriorityLevel(cursor.getString((int)cursor.getColumnIndex(COLUMN_USER_PRIORITY)));
+                u.setPriorityLevel(cursor.getString((int)cursor.getColumnIndex(COLUMN_LEVEL_PRIORITY)));
                 u.setEmail(cursor.getString((int)cursor.getColumnIndex(COLUMN_EMAIL)));
                 u.setAddress(cursor.getString((int)cursor.getColumnIndex(COLUMN_ADDRESS)));
                 u.setPhoneNumber(cursor.getString((int)cursor.getColumnIndex(COLUMN_PHONE_NUMBER)));

@@ -2,6 +2,7 @@ package com.example.osprojectfinal;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.widget.TextView;
 
 public class User implements Parcelable {
 
@@ -12,6 +13,7 @@ public class User implements Parcelable {
 
     public User() {
     }
+
 
     public User(String firstName, String lastName, String email, String phoneNumber, String address, String position, String id, String priorityLevel, String username, String password) {
         this.firstName = firstName;

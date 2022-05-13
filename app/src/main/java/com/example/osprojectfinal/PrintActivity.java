@@ -74,25 +74,20 @@ public class PrintActivity extends AppCompatActivity {
 
         if (user.getPriorityLevel().equals("1")){
 
-            Toast.makeText(PrintActivity.this, "I am here 0", Toast.LENGTH_SHORT).show();
-
             if (getIndex(1) == -1)
             {
-                Toast.makeText(PrintActivity.this, "I am here 1", Toast.LENGTH_SHORT).show();
-
                 processId = startProcess1;
                 processPriority = "1";
                 processState = "New";
-                processIoInformation = "Linked to Printer";
+                processIoInformation = "Requesting to access printer";
             }
             else {
-                Toast.makeText(PrintActivity.this, "I am here 2", Toast.LENGTH_SHORT).show();
+
                 process = lstProcess.get(getIndex(1));
                 int temp = Integer.parseInt(process.getId());
 
-                if (temp >= 199){
-                    Toast.makeText(PrintActivity.this, "I am here 3", Toast.LENGTH_SHORT).show();
-                    //Toast.makeText(MainActivity.this, "User can't print anymore.", Toast.LENGTH_SHORT).show();
+                if (temp >= 104){
+                    Toast.makeText(PrintActivity.this, "Limit is over!", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 else {
@@ -100,7 +95,7 @@ public class PrintActivity extends AppCompatActivity {
                     processId = String.valueOf(temp);
                     processPriority = "1";
                     processState = "New";
-                    processIoInformation = "Linked to Printer";
+                    processIoInformation = "Requesting to access printer";
                 }
             }
         }
@@ -110,14 +105,14 @@ public class PrintActivity extends AppCompatActivity {
                 processId = startProcess2;
                 processPriority = "2";
                 processState = "New";
-                processIoInformation = "Linked to Printer";
+                processIoInformation = "Requesting to access printer";
             }
             else {
                 process = lstProcess.get(getIndex(2));
                 int temp = Integer.parseInt(process.getId());
 
-                if (temp >= 299){
-                    Toast.makeText(PrintActivity.this, "User can't print anymore.", Toast.LENGTH_SHORT).show();
+                if (temp >= 204){
+                    Toast.makeText(PrintActivity.this, "Limit is over!", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 else {
@@ -125,7 +120,7 @@ public class PrintActivity extends AppCompatActivity {
                     processId = String.valueOf(temp);
                     processPriority = "2";
                     processState = "New";
-                    processIoInformation = "Linked to Printer";
+                    processIoInformation = "Requesting to access printer";
                 }
             }
         }
@@ -135,14 +130,14 @@ public class PrintActivity extends AppCompatActivity {
                 processId = startProcess3;
                 processPriority = "3";
                 processState = "New";
-                processIoInformation = "Linked to Printer";
+                processIoInformation = "Requesting to access printer";
             }
             else {
                 process = lstProcess.get(getIndex(3));
                 int temp = Integer.parseInt(process.getId());
 
-                if (temp >= 399){
-                    Toast.makeText(PrintActivity.this, "User can't print anymore.", Toast.LENGTH_SHORT).show();
+                if (temp >= 304){
+                    Toast.makeText(PrintActivity.this, "Limit is over!", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 else {
@@ -150,21 +145,18 @@ public class PrintActivity extends AppCompatActivity {
                     processId = String.valueOf(temp);
                     processPriority = "3";
                     processState = "New";
-                    processIoInformation = "Linked to Printer";
+                    processIoInformation = "Requesting to access printer";
                 }
             }
         }
 
-//        if (processId != null){
         process.setIoInformation(processIoInformation);
         process.setState(processState);
         process.setId(processId);
         process.setPriority(processPriority);
 
         db.insertProcess(process);
-//        }
     }
-
 
     public int getIndex ( int index){
         int tempId = 0;
