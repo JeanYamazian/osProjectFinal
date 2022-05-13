@@ -15,7 +15,7 @@ public class PrintActivity extends AppCompatActivity {
 
     Button button;
     TextView text;
-    Button print;
+    Button print , buttonOpen;
 
 
     String processPriority = "", startProcess1 = "100", startProcess2 = "200",
@@ -33,6 +33,7 @@ public class PrintActivity extends AppCompatActivity {
 
         text = findViewById(R.id.tvText);
         print = findViewById(R.id.btPrint);
+        buttonOpen = findViewById(R.id.buttonOpen);
 
         db = SQLDBHelper.getInstance(getApplicationContext());
         lstUser = db.getAllUsers();
@@ -49,6 +50,14 @@ public class PrintActivity extends AppCompatActivity {
                 lstProcess = db.getAllProcesses();
 
                 allWork(user);
+            }
+        });
+
+        buttonOpen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getApplicationContext(),QueueActivity.class);
+                startActivity(i);
             }
         });
     }
@@ -86,7 +95,7 @@ public class PrintActivity extends AppCompatActivity {
                 process = lstProcess.get(getIndex(1));
                 int temp = Integer.parseInt(process.getId());
 
-                if (temp >= 104){
+                if (temp >= 101){
                     Toast.makeText(PrintActivity.this, "Limit is over!", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -111,7 +120,7 @@ public class PrintActivity extends AppCompatActivity {
                 process = lstProcess.get(getIndex(2));
                 int temp = Integer.parseInt(process.getId());
 
-                if (temp >= 204){
+                if (temp >= 201){
                     Toast.makeText(PrintActivity.this, "Limit is over!", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -136,7 +145,7 @@ public class PrintActivity extends AppCompatActivity {
                 process = lstProcess.get(getIndex(3));
                 int temp = Integer.parseInt(process.getId());
 
-                if (temp >= 304){
+                if (temp >= 301){
                     Toast.makeText(PrintActivity.this, "Limit is over!", Toast.LENGTH_SHORT).show();
                     return;
                 }
