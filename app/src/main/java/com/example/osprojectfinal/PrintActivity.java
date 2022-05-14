@@ -17,6 +17,11 @@ public class PrintActivity extends AppCompatActivity {
     TextView text;
     Button print , buttonOpen;
 
+    Queue myQueue = new Queue(6);
+
+    Process process = new Process();
+
+
 
     String processPriority = "", startProcess1 = "100", startProcess2 = "200",
             startProcess3 = "300", processId = "", processState = "", processIoInformation = "";
@@ -95,12 +100,14 @@ public class PrintActivity extends AppCompatActivity {
                 process = lstProcess.get(getIndex(1));
                 int temp = Integer.parseInt(process.getId());
 
-                if (temp >= 101){
+                if (getCount(3) > 0 && getCount(3)<2){
                     Toast.makeText(PrintActivity.this, "Limit is over!", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 else {
                     temp ++;
+
+                    //myQueue.enqueue(String.valueOf(process.getId()));
                     processId = String.valueOf(temp);
                     processPriority = "1";
                     processState = "New";
@@ -120,7 +127,7 @@ public class PrintActivity extends AppCompatActivity {
                 process = lstProcess.get(getIndex(2));
                 int temp = Integer.parseInt(process.getId());
 
-                if (temp >= 201){
+                if (getCount(3) > 0 && getCount(3)<2){
                     Toast.makeText(PrintActivity.this, "Limit is over!", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -145,7 +152,7 @@ public class PrintActivity extends AppCompatActivity {
                 process = lstProcess.get(getIndex(3));
                 int temp = Integer.parseInt(process.getId());
 
-                if (temp >= 301){
+                if (getCount(3) > 0 && getCount(3)<2){
                     Toast.makeText(PrintActivity.this, "Limit is over!", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -216,6 +223,56 @@ public class PrintActivity extends AppCompatActivity {
             }
         }
         return -1;
+    }
+
+    public int getCount(int number)
+    {
+        int tempId = 0,counter1 = 0,counter2 = 0,counter3 = 0;
+        String userId = "";
+        Process process;
+        if (number == 1) {
+            for (int i = 0; i < lstProcess.size(); ++i) {
+                process = lstProcess.get(i);
+                userId = process.getId();
+                tempId = Integer.parseInt(userId);
+
+                if (tempId / 100 == 1) {
+
+                    counter1++;
+                }
+            }
+            if (counter1 != 0) {
+                return counter1;
+            }
+        }else if (number == 2) {
+            for (int i = 0; i < lstProcess.size(); ++i) {
+                process = lstProcess.get(i);
+                userId = process.getId();
+                tempId = Integer.parseInt(userId);
+
+                if (tempId / 100 == 2) {
+
+                    counter2++;
+                }
+            }
+            if (counter2 != 0) {
+                return counter2;
+            }
+        } else if (number == 3) {
+            for (int i = 0; i < lstProcess.size(); ++i) {
+                process = lstProcess.get(i);
+                userId = process.getId();
+                tempId = Integer.parseInt(userId);
+
+                if (tempId / 100 == 3) {
+                    counter2++;
+                }
+            }
+            if (counter2 != 0) {
+                return counter2;
+            }
+        }
+        return 0;
     }
 }
 

@@ -25,29 +25,33 @@ public class Queue {
         }
         else {
             if (rear == maxSize){
-                rear =0;
+                rear = 0;
             }
 
             processes [rear] = process;
             rear++;
             currentSize++;
             adjustPriority();
+
         }
 
     }
 
 
-    public void dequeue (){
+    public Process dequeue (){
+        Process process;
         if (isEmpty()){
-            return;
+            return null;
         }
         else {
             if (front == maxSize){
                 front = 0;
             }
+            process = processes[front];
             front ++;
             currentSize--;
         }
+        return process;
     }
 
     public boolean isFull (){
@@ -68,21 +72,40 @@ public class Queue {
         }
     }
 
-    public void adjustPriority (){
+    public void adjustPriority () {
         Process temp;
-        for (int i =0; i<currentSize; ++i){
-            String priorityA = processes[i].priority;
-            int prA = Integer.parseInt(priorityA);
-            for (int j= i; j<currentSize; ++i){
-                String priorityB = processes[j].priority;
-                int prB = Integer.parseInt(priorityB);
-
-                if (prA < prB){
+        int counter = 0;
+        int priority1,priority2;
+        for(int i=0;i<currentSize;++i)
+        {
+            priority1 = Integer.parseInt(processes[i].getPriority());
+            counter++;
+            for(int j=counter;j<currentSize;j++)
+            {
+                priority2 = Integer.parseInt(processes[j].getPriority());
+                if(priority1<priority2)
+                {
                     temp = processes[i];
                     processes[i] = processes[j];
                     processes[j] = temp;
                 }
             }
         }
+
     }
 }
+//        String temp;
+//        for (int i =0; i<currentSize; ++i){
+//            String priorityA = processes[i].getPriority();
+//            int prA = Integer.parseInt(priorityA);
+//            for (int j= i; j<currentSize; ++i){
+//                String priorityB = processes[j].getPriority();
+//                int prB = Integer.parseInt(priorityB);
+//
+//                if (prA < prB){
+//                    temp = processes[i];
+//                    processes[i] = processes[j];
+//                    processes[j] = temp;
+//                }
+//
+//            }

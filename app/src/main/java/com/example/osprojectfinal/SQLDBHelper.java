@@ -55,7 +55,7 @@ public class SQLDBHelper extends SQLiteOpenHelper {
         final String SQL_CREATE_TABLE_USER = " CREATE TABLE " + TBL_USERS + " ( " + COLUMN_USER_ID + " INTEGER PRIMARY KEY, " + COLUMN_USERNAME + " TEXT, " + COLUMN_PASSWORD + " TEXT, " + COLUMN_FIRST_NAME + " TEXT, " + COLUMN_LAST_NAME + " TEXT, " +  COLUMN_EMAIL + " TEXT, " + COLUMN_PHONE_NUMBER + " TEXT, " +
                 COLUMN_ADDRESS + " TEXT, " + COLUMN_LEVEL_PRIORITY + " TEXT, "  + COLUMN_POSITION + " TEXT " +" ) ";
 
-        final String SQL_CREATE_TABLE_PROCESS = " CREATE TABLE " + TBL_PROCESS + " ( " + COLUMN_PROCESS_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+        final String SQL_CREATE_TABLE_PROCESS = " CREATE TABLE " + TBL_PROCESS + " ( " + COLUMN_PROCESS_ID + " TEXT PRIMARY KEY, "
                 + COLUMN_PRIORITY + " TEXT, " + COLUMN_STATE + " TEXT, " + COLUMN_IO_INFORMATION + " TEXT " + " ) ";
 
         db.execSQL(SQL_CREATE_TABLE_USER);
@@ -123,11 +123,11 @@ public class SQLDBHelper extends SQLiteOpenHelper {
         return update;
     }
 
-    public void deleteProcess(String processID)
+    public boolean deleteProcess(String processID)
     {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TBL_PROCESS, "name=?", new String[]{processID});
-        db.close();
+        return db.delete(TBL_PROCESS, "name=?", new String[]{processID}) > 0;
+
     }
 
     public ArrayList<User> getAllUsers() {
