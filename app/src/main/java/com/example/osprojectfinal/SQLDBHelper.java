@@ -123,10 +123,10 @@ public class SQLDBHelper extends SQLiteOpenHelper {
         return update;
     }
 
-    public boolean deleteProcess(String processID)
+    public void deleteProcess(String processID)
     {
         SQLiteDatabase db = this.getWritableDatabase();
-        return db.delete(TBL_PROCESS, "name=?", new String[]{processID}) > 0;
+        db.delete(TBL_PROCESS, "PROCESS_ID=?", new String[]{processID});
 
     }
 

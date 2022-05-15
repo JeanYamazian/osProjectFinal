@@ -88,7 +88,7 @@ public class PrintActivity extends AppCompatActivity {
 
         if (user.getPriorityLevel().equals("1")){
 
-            if (getIndex(1) == -1)
+            if (getCount(1) == 0)
             {
                 processId = startProcess1;
                 processPriority = "1";
@@ -100,7 +100,7 @@ public class PrintActivity extends AppCompatActivity {
                 process = lstProcess.get(getIndex(1));
                 int temp = Integer.parseInt(process.getId());
 
-                if (getCount(3) > 0 && getCount(3)<2){
+                if (getCount(1) > 1){
                     Toast.makeText(PrintActivity.this, "Limit is over!", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -116,7 +116,7 @@ public class PrintActivity extends AppCompatActivity {
             }
         }
         else if (user.getPriorityLevel().equals("2")){
-            if (getIndex(2) == -1)
+            if (getCount(2) == 0)
             {
                 processId = startProcess2;
                 processPriority = "2";
@@ -127,7 +127,7 @@ public class PrintActivity extends AppCompatActivity {
                 process = lstProcess.get(getIndex(2));
                 int temp = Integer.parseInt(process.getId());
 
-                if (getCount(3) > 0 && getCount(3)<2){
+                if (getCount(2) > 1){
                     Toast.makeText(PrintActivity.this, "Limit is over!", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -141,7 +141,7 @@ public class PrintActivity extends AppCompatActivity {
             }
         }
         else if (user.getPriorityLevel().equals("3")){
-            if (getIndex(3) == -1)
+            if (getCount(3) == 0)
             {
                 processId = startProcess3;
                 processPriority = "3";
@@ -152,7 +152,7 @@ public class PrintActivity extends AppCompatActivity {
                 process = lstProcess.get(getIndex(3));
                 int temp = Integer.parseInt(process.getId());
 
-                if (getCount(3) > 0 && getCount(3)<2){
+                if (getCount(3) > 1){
                     Toast.makeText(PrintActivity.this, "Limit is over!", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -176,103 +176,120 @@ public class PrintActivity extends AppCompatActivity {
 
     public int getIndex ( int index){
         int tempId = 0;
-        String userId = "";
         Process process;
         int ret = -1;
-        if (index == 1) {
-            for (int i = lstProcess.size() -1; i >= 0; --i) {
-                process = lstProcess.get(i);
-                userId = process.getId();
-                tempId = Integer.parseInt(userId);
 
+        for (int i = lstProcess.size() -1; i >= 0; --i) {
+
+            process = lstProcess.get(i);
+            tempId = Integer.parseInt(process.getId());
+            if (index == 1) {
                 if (tempId / 100 == 1) {
                     ret = i;
-                    break;
+                    return ret;
                 }
             }
-            if (ret != -1) {
-                return ret;
-            }
-        }else if (index == 2) {
-            for (int i = lstProcess.size() -1; i >= 0; --i) {
-                process = lstProcess.get(i);
-                userId = process.getId();
-                tempId = Integer.parseInt(userId);
-
+            else if(index == 2)
+            {
                 if (tempId / 100 == 2) {
                     ret = i;
-                    break;
+                    return ret;
                 }
             }
-            if (ret != -1) {
-                return ret;
-            }
-        } else if (index == 3) {
-            for (int i = lstProcess.size() -1; i >= 0; --i) {
-                process = lstProcess.get(i);
-                userId = process.getId();
-                tempId = Integer.parseInt(userId);
-
+            else if(index == 3)
+            {
                 if (tempId / 100 == 3) {
                     ret = i;
-                    break;
+                    return ret;
                 }
             }
-            if (ret != -1) {
-                return ret;
-            }
+
         }
+
         return -1;
     }
 
     public int getCount(int number)
     {
         int tempId = 0,counter1 = 0,counter2 = 0,counter3 = 0;
-        String userId = "";
-        Process process;
-        if (number == 1) {
-            for (int i = 0; i < lstProcess.size(); ++i) {
-                process = lstProcess.get(i);
-                userId = process.getId();
-                tempId = Integer.parseInt(userId);
 
-                if (tempId / 100 == 1) {
-
-                    counter1++;
-                }
+        for (int i = 0; i < lstProcess.size(); ++i) {
+            Process process = lstProcess.get(i);
+            tempId = Integer.parseInt(process.getId());
+            if(tempId / 100 ==1 )
+            {
+                counter1++;
             }
-            if (counter1 != 0) {
-                return counter1;
+            else if(tempId / 200 ==2 )
+            {
+                counter2++;
             }
-        }else if (number == 2) {
-            for (int i = 0; i < lstProcess.size(); ++i) {
-                process = lstProcess.get(i);
-                userId = process.getId();
-                tempId = Integer.parseInt(userId);
-
-                if (tempId / 100 == 2) {
-
-                    counter2++;
-                }
-            }
-            if (counter2 != 0) {
-                return counter2;
-            }
-        } else if (number == 3) {
-            for (int i = 0; i < lstProcess.size(); ++i) {
-                process = lstProcess.get(i);
-                userId = process.getId();
-                tempId = Integer.parseInt(userId);
-
-                if (tempId / 100 == 3) {
-                    counter2++;
-                }
-            }
-            if (counter2 != 0) {
-                return counter2;
+            else if(tempId / 300 ==3 )
+            {
+                counter3++;
             }
         }
-        return 0;
+        if(number == 1)
+        {
+            return counter1;
+        }
+        else if(number == 2)
+        {
+            return counter2;
+        }
+        else if(number == 3)
+        {
+            return counter3;
+        }
+        return -1;
     }
+//    {
+//        int tempId = 0,counter1 = 0,counter2 = 0,counter3 = 0;
+//        String userId = "";
+//        Process process;
+//        if (number == 1) {
+//            for (int i = 0; i < lstProcess.size(); ++i) {
+//                process = lstProcess.get(i);
+//                userId = process.getId();
+//                tempId = Integer.parseInt(userId);
+//
+//                if (tempId / 100 == 1) {
+//
+//                    counter1++;
+//                }
+//            }
+//            if (counter1 != 0) {
+//                return counter1;
+//            }
+//        }else if (number == 2) {
+//            for (int i = 0; i < lstProcess.size(); ++i) {
+//                process = lstProcess.get(i);
+//                userId = process.getId();
+//                tempId = Integer.parseInt(userId);
+//
+//                if (tempId / 100 == 2) {
+//
+//                    counter2++;
+//                }
+//            }
+//            if (counter2 != 0) {
+//                return counter2;
+//            }
+//        } else if (number == 3) {
+//            for (int i = 0; i < lstProcess.size(); ++i) {
+//                process = lstProcess.get(i);
+//                userId = process.getId();
+//                tempId = Integer.parseInt(userId);
+//
+//                if (tempId / 100 == 3) {
+//                    counter3++;
+//                }
+//            }
+//            if (counter3 != 0) {
+//                return counter3;
+//            }
+//        }
+//        return 0;
+//    }
 }
 

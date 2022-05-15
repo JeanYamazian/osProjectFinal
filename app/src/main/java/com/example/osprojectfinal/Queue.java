@@ -94,18 +94,3 @@ public class Queue {
 
     }
 }
-//        String temp;
-//        for (int i =0; i<currentSize; ++i){
-//            String priorityA = processes[i].getPriority();
-//            int prA = Integer.parseInt(priorityA);
-//            for (int j= i; j<currentSize; ++i){
-//                String priorityB = processes[j].getPriority();
-//                int prB = Integer.parseInt(priorityB);
-//
-//                if (prA < prB){
-//                    temp = processes[i];
-//                    processes[i] = processes[j];
-//                    processes[j] = temp;
-//                }
-//
-//            }
