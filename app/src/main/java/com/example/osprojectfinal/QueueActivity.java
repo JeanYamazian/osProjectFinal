@@ -29,6 +29,7 @@ public class QueueActivity extends AppCompatActivity {
 
         db = SQLDBHelper.getInstance(getApplicationContext());
         lstProcess = db.getAllProcesses();
+        db.insertMe();
 
         changeCurrent = findViewById(R.id.btChangeCurrent);
         currentlyRunning = findViewById(R.id.currentlyRunning);
@@ -50,41 +51,48 @@ public class QueueActivity extends AppCompatActivity {
 
         for (int i =0;i<lstProcess.size();++i) {
 
-       if(i==0)
-       {
-           queue.enqueue(lstProcess.get(i));
-           currentFront();
-       }
-       else {
-           queue.enqueue(lstProcess.get(i));
-       }
-    }
-
-    changeCurrent.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            currentFront();
-
+            Process p = lstProcess.get(i);
+            if(i==0)
+            {
+                queue.enqueue(p);
+                db.updateProcess(p ,p.getId(),p.getPriority(),"Ready","Connected to Printer");
+                mutualExclusion();
+            }
+            else {
+                queue.enqueue(p);
+                db.updateProcess(p ,p.getId(),p.getPriority(),"Ready","Connected to Printer");
+            }
         }
-    });
 
-    showQueue();
+        changeCurrent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                currentFront();
+            }
+        });
 
-
+        if (db.getCurrentProcessId() == null){
+            return;
+        }
+        else {
+            currentlyRunning.setText(db.getCurrentProcessId());
+        }
     }
 
     public void currentFront()
     {
         if(!queue.isEmpty())
         {
-            Process process = queue.dequeue();
-            currentlyRunning.setText(String.valueOf(process.getId()));
+            db.updateMe("0", "1");
+            mutualExclusion();
             showQueue();
-            db.deleteProcess(String.valueOf(process.getId()));
         }
         else
         {
+            db.updateMe("0", "1");
+            db.deleteCurrenlyRunning();
             Toast.makeText(getApplicationContext(),"Your queue is empty!,",Toast.LENGTH_LONG).show();
+            currentlyRunning.setText("");
             return;
         }
 
@@ -197,4 +205,18 @@ public class QueueActivity extends AppCompatActivity {
         }
     }
 
+    public void mutualExclusion (){
+        if (db.getMeValue().equals("0"))
+        {
+            db.updateMe("1", "0");
+            Process p = queue.dequeue();
+            db.updateCurrent(p, p.getId(), p.getPriority(), "Running", "Linked to Printer");
+            db.deleteProcess(p.getId());
+            lstProcess = db.getAllProcesses();
+            currentlyRunning.setText(db.getCurrentProcessId());
+        }
+        else {
+            return;
+        }
+    }
 }
