@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -14,11 +13,15 @@ import java.util.ArrayList;
 
 public class PrintActivity extends AppCompatActivity {
 
-    Button bt, bt2;
+    Button button;
     TextView text;
     Button print , buttonOpen;
 
-    Queue queue = new Queue(6);
+    Queue myQueue = new Queue(6);
+
+    Process process = new Process();
+
+
 
     String processPriority = "", startProcess1 = "100", startProcess2 = "200",
             startProcess3 = "300", processId = "", processState = "", processIoInformation = "";
@@ -33,9 +36,6 @@ public class PrintActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_print);
 
-
-        bt2 = findViewById(R.id.btBt2);
-        bt = findViewById(R.id.btBt);
         text = findViewById(R.id.tvText);
         print = findViewById(R.id.btPrint);
         buttonOpen = findViewById(R.id.buttonOpen);
@@ -48,25 +48,12 @@ public class PrintActivity extends AppCompatActivity {
         Intent intent = getIntent();
         User user = (User) intent.getParcelableExtra("USER");
 
-        bt2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Process p = new Process("900", "9", "NEW", "NONE");
-                db.insertProcess(p);
-            }
-        });
-
-        bt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                db.updateProcess(lstProcess.get(0),"900", "9", "Running","CONNECTED");
-            }
-        });
         print.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 lstUser = db.getAllUsers();
                 lstProcess = db.getAllProcesses();
+
                 allWork(user);
             }
         });
@@ -119,6 +106,8 @@ public class PrintActivity extends AppCompatActivity {
                 }
                 else {
                     temp ++;
+
+                    //myQueue.enqueue(String.valueOf(process.getId()));
                     processId = String.valueOf(temp);
                     processPriority = "1";
                     processState = "New";
@@ -181,100 +170,126 @@ public class PrintActivity extends AppCompatActivity {
         process.setState(processState);
         process.setId(processId);
         process.setPriority(processPriority);
-        queue.enqueue(process);
+
         db.insertProcess(process);
     }
 
     public int getIndex ( int index){
         int tempId = 0;
-        String userId = "";
         Process process;
         int ret = -1;
-        if (index == 1) {
-            for (int i = lstProcess.size() -1; i >= 0; --i) {
-                process = lstProcess.get(i);
-                userId = process.getId();
-                tempId = Integer.parseInt(userId);
 
+        for (int i = lstProcess.size() -1; i >= 0; --i) {
+
+            process = lstProcess.get(i);
+            tempId = Integer.parseInt(process.getId());
+            if (index == 1) {
                 if (tempId / 100 == 1) {
                     ret = i;
-                    break;
+                    return ret;
                 }
             }
-            if (ret != -1) {
-                return ret;
-            }
-        }else if (index == 2) {
-            for (int i = lstProcess.size() -1; i >= 0; --i) {
-                process = lstProcess.get(i);
-                userId = process.getId();
-                tempId = Integer.parseInt(userId);
-
+            else if(index == 2)
+            {
                 if (tempId / 100 == 2) {
                     ret = i;
-                    break;
+                    return ret;
                 }
             }
-            if (ret != -1) {
-                return ret;
-            }
-        } else if (index == 3) {
-            for (int i = lstProcess.size() -1; i >= 0; --i) {
-                process = lstProcess.get(i);
-                userId = process.getId();
-                tempId = Integer.parseInt(userId);
-
+            else if(index == 3)
+            {
                 if (tempId / 100 == 3) {
                     ret = i;
-                    break;
+                    return ret;
                 }
             }
-            if (ret != -1) {
-                return ret;
-            }
+
         }
+
         return -1;
     }
 
-    public int getCount (int number){
-        lstProcess = db.getAllProcesses();
-        Process process;
-        int idInt = 0, counter1 = 0, counter2 = 0, counter3 =0;
-        if (number == 1){
-            for (int i =0; i<lstProcess.size(); ++i){
-                process = lstProcess.get(i);
-                idInt = Integer.parseInt(process.getId());
+    public int getCount(int number)
+    {
+        int tempId = 0,counter1 = 0,counter2 = 0,counter3 = 0;
 
-                if (idInt/100 == 1){
-                    counter1++;
-                }
+        for (int i = 0; i < lstProcess.size(); ++i) {
+            Process process = lstProcess.get(i);
+            tempId = Integer.parseInt(process.getId());
+            if(tempId / 100 ==1 )
+            {
+                counter1++;
             }
+            else if(tempId / 200 ==2 )
+            {
+                counter2++;
+            }
+            else if(tempId / 300 ==3 )
+            {
+                counter3++;
+            }
+        }
+        if(number == 1)
+        {
             return counter1;
         }
-
-        else if (number == 2){
-            for (int i =0; i<lstProcess.size(); ++i){
-                process = lstProcess.get(i);
-                idInt = Integer.parseInt(process.getId());
-
-                if (idInt/100 == 2){
-                    counter2++;
-                }
-            }
+        else if(number == 2)
+        {
             return counter2;
         }
-        else if (number == 3){
-            for (int i =0; i<lstProcess.size(); ++i){
-                process = lstProcess.get(i);
-                idInt = Integer.parseInt(process.getId());
-
-                if (idInt/100 == 3){
-                    counter3++;
-                }
-            }
+        else if(number == 3)
+        {
             return counter3;
         }
         return -1;
     }
+//    {
+//        int tempId = 0,counter1 = 0,counter2 = 0,counter3 = 0;
+//        String userId = "";
+//        Process process;
+//        if (number == 1) {
+//            for (int i = 0; i < lstProcess.size(); ++i) {
+//                process = lstProcess.get(i);
+//                userId = process.getId();
+//                tempId = Integer.parseInt(userId);
+//
+//                if (tempId / 100 == 1) {
+//
+//                    counter1++;
+//                }
+//            }
+//            if (counter1 != 0) {
+//                return counter1;
+//            }
+//        }else if (number == 2) {
+//            for (int i = 0; i < lstProcess.size(); ++i) {
+//                process = lstProcess.get(i);
+//                userId = process.getId();
+//                tempId = Integer.parseInt(userId);
+//
+//                if (tempId / 100 == 2) {
+//
+//                    counter2++;
+//                }
+//            }
+//            if (counter2 != 0) {
+//                return counter2;
+//            }
+//        } else if (number == 3) {
+//            for (int i = 0; i < lstProcess.size(); ++i) {
+//                process = lstProcess.get(i);
+//                userId = process.getId();
+//                tempId = Integer.parseInt(userId);
+//
+//                if (tempId / 100 == 3) {
+//                    counter3++;
+//                }
+//            }
+//            if (counter3 != 0) {
+//                return counter3;
+//            }
+//        }
+//        return 0;
+//    }
 }
 

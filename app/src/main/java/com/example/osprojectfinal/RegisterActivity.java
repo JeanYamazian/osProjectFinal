@@ -91,12 +91,7 @@ public class RegisterActivity extends AppCompatActivity {
         if (positionStr.equals("Entry-Level")) {
 
             if (getIndex(1) == -1) {
-                if (db.getCurrentProcessId() == "100"){
-                    u.setId("101");
-                }
-                else {
-                    u.setId(entryStart);
-                }
+                u.setId(entryStart);
             }
             else {
                 User lastUser = lstUser.get(getIndex(1));
@@ -121,12 +116,7 @@ public class RegisterActivity extends AppCompatActivity {
         else if (positionStr.equals("Mid-Level")) {
 
             if (getIndex(2) == -1) {
-                if (db.getCurrentProcessId() == "100"){
-                    u.setId("201");
-                }
-                else {
-                    u.setId(midStart);
-                }
+                u.setId(midStart);
             }
             else {
                 User lastUser = lstUser.get(getIndex(2));
@@ -151,12 +141,7 @@ public class RegisterActivity extends AppCompatActivity {
         else if (positionStr.equals("Senior-Level")) {
 
             if (getIndex(3) == -1) {
-                if (db.getCurrentProcessId() == "100"){
-                    u.setId("301");
-                }
-                else {
-                    u.setId(seniorStart);
-                }
+                u.setId(seniorStart);
             }
             else {
                 User lastUser = lstUser.get(getIndex(3));

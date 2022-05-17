@@ -26,16 +26,5 @@
         android:id="@+id/buttonOpen"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Check Info" />
-    <Button
-        android:id="@+id/btBt"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Check Info" />
-    <Button
-        android:id="@+id/btBt2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Check Info" />
-
+        android:text="Button" />
 </LinearLayout>

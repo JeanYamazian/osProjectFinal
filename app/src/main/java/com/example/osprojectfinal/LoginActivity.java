@@ -31,6 +31,16 @@ public class LoginActivity extends AppCompatActivity {
         passwordTxtV = findViewById(R.id.password);
         loginBtn = findViewById(R.id.LoginBTN);
 
+//        db = SQLDBHelper.getInstance(getApplicationContext());
+//
+//        lstUser = db.getAllUsers();
+//
+//        Bundle b = getIntent().getExtras();
+//        if(b!=null)
+//        {
+//            usernamTxtV.setText(b.getString("username"));
+//            passwordTxtV.setText(b.getString("password"));
+//        }
 
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
