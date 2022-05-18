@@ -2,14 +2,14 @@ package com.example.osprojectfinal;
 
 public class Process {
 
-    String id, priority;
-    String state, ioInformation;
+    String id, priority, state, ioInformation, initializedBy;
 
-    public Process(String id, String priority, String state, String ioInformation) {
+    public Process(String id, String priority, String state, String ioInformation, String initializedBy) {
         this.id = id;
         this.priority = priority;
         this.state = state;
         this.ioInformation = ioInformation;
+        this.initializedBy = initializedBy;
     }
 
     public Process() {
@@ -45,5 +45,13 @@ public class Process {
 
     public void setIoInformation(String ioInformation) {
         this.ioInformation = ioInformation;
+    }
+
+    public String getInitializedBy() {
+        return initializedBy;
+    }
+
+    public void setInitializedBy(String initializedBy) {
+        this.initializedBy = initializedBy;
     }
 }

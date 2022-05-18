@@ -3,6 +3,7 @@ package com.example.osprojectfinal;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -31,6 +32,19 @@ public class SQLDBHelper extends SQLiteOpenHelper {
     private final static String COLUMN_PRIORITY = "PRIORITY";
     private final static String COLUMN_STATE= "STATE";
     private final static String COLUMN_IO_INFORMATION = "IO_INFORMATION";
+    private final static String COLUMN_INITIALIZED_BY = "INITIALIZED_BY";
+
+
+    private final static String TBL_ME = "ME_TBL";
+    private final static String COLUMN_ME = "ME";
+
+    private final static String TBL_CURRENTLY_RUNNING = "CURRENTLY_RUNNING_TBL";
+    private final static String COLUMN_PROCESS_ID_2 = "PROCESS_ID";
+    private final static String COLUMN_PRIORITY_2 = "PRIORITY";
+    private final static String COLUMN_STATE_2 = "STATE";
+    private final static String COLUMN_IO_INFORMATION_2 = "IO_INFORMATION";
+    private final static String COLUMN_INITIALIZED_BY_2 = "INITIALIZED_BY";
+
 
     private SQLiteDatabase db;
     private static SQLDBHelper instance;
@@ -45,6 +59,7 @@ public class SQLDBHelper extends SQLiteOpenHelper {
         {
             instance = new SQLDBHelper(context.getApplicationContext());
         }
+
         return instance;
     }
 
@@ -55,13 +70,88 @@ public class SQLDBHelper extends SQLiteOpenHelper {
         final String SQL_CREATE_TABLE_USER = " CREATE TABLE " + TBL_USERS + " ( " + COLUMN_USER_ID + " INTEGER PRIMARY KEY, " + COLUMN_USERNAME + " TEXT, " + COLUMN_PASSWORD + " TEXT, " + COLUMN_FIRST_NAME + " TEXT, " + COLUMN_LAST_NAME + " TEXT, " +  COLUMN_EMAIL + " TEXT, " + COLUMN_PHONE_NUMBER + " TEXT, " +
                 COLUMN_ADDRESS + " TEXT, " + COLUMN_LEVEL_PRIORITY + " TEXT, "  + COLUMN_POSITION + " TEXT " +" ) ";
 
-        final String SQL_CREATE_TABLE_PROCESS = " CREATE TABLE " + TBL_PROCESS + " ( " + COLUMN_PROCESS_ID + " TEXT PRIMARY KEY, "
-                + COLUMN_PRIORITY + " TEXT, " + COLUMN_STATE + " TEXT, " + COLUMN_IO_INFORMATION + " TEXT " + " ) ";
+        final String SQL_CREATE_TABLE_PROCESS = " CREATE TABLE " + TBL_PROCESS + " ( " + COLUMN_PROCESS_ID + " TEXT PRIMARY KEY, " + COLUMN_PRIORITY + " TEXT, " + COLUMN_STATE + " TEXT, " + COLUMN_IO_INFORMATION + " TEXT, " + COLUMN_INITIALIZED_BY + " TEXT " + " ) ";
+
+        final String SQL_CREATE_TABLE_ME = " CREATE TABLE " + TBL_ME + " ( " + COLUMN_ME + " INTEGER PRIMARY KEY " + " ) ";
+
+        final String SQL_CREATE_TABLE_CURRENTLY_RUNNING = " CREATE TABLE " + TBL_CURRENTLY_RUNNING + " ( " + COLUMN_PROCESS_ID_2 + " TEXT PRIMARY KEY, " + COLUMN_PRIORITY_2 + " TEXT, " + COLUMN_STATE_2 + " TEXT, " + COLUMN_IO_INFORMATION_2 + " TEXT, " + COLUMN_INITIALIZED_BY_2 + " TEXT " + " ) ";
+
 
         db.execSQL(SQL_CREATE_TABLE_USER);
         db.execSQL(SQL_CREATE_TABLE_PROCESS);
+        db.execSQL(SQL_CREATE_TABLE_ME);
+        db.execSQL(SQL_CREATE_TABLE_CURRENTLY_RUNNING);
     }
 
+    public String getCurrentProcessId (){
+        String i = null;
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TBL_CURRENTLY_RUNNING, null);
+        if (cursor.moveToFirst()){
+            i = String.valueOf(cursor.getString(0));
+            return i;
+        }
+        return i;
+
+    }
+    public void updateCurrent (Process p, String newId, String newPriority, String newState, String newIoInfo, String newInitializedBy2){
+        this.db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        long NoOfRows = DatabaseUtils.queryNumEntries(db,TBL_CURRENTLY_RUNNING);
+
+
+        String oldId = "";
+
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TBL_CURRENTLY_RUNNING, null);
+        if (cursor.moveToFirst()){
+            oldId = String.valueOf(cursor.getString(0));
+        }
+
+        values.put(COLUMN_STATE_2,newState);
+        values.put(COLUMN_IO_INFORMATION_2,newIoInfo);
+        values.put(COLUMN_PRIORITY_2,newPriority);
+        values.put(COLUMN_PROCESS_ID_2,newId);
+        values.put(COLUMN_INITIALIZED_BY_2,newInitializedBy2);
+        String[] whereArgs = {oldId};
+
+        if (NoOfRows==0){
+            db.insert(TBL_CURRENTLY_RUNNING,null, values);
+        }
+        else {
+            db.update(TBL_CURRENTLY_RUNNING, values, COLUMN_PROCESS_ID + "= ?", whereArgs);
+        }
+    }
+    public String getMeValue(){
+        String i = "";
+        db = getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TBL_ME, null);
+        if (cursor.moveToFirst()){
+            i = String.valueOf(cursor.getString(0));
+        }
+        return i;
+    }
+    public void updateMe (String newNumber, String oldNumber){
+        this.db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_ME,newNumber);
+        String[] whereArgs = {oldNumber};
+        db.update(TBL_ME, values, COLUMN_ME + "= ?",whereArgs);
+    }
+    public void insertMe(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        long NoOfRows = DatabaseUtils.queryNumEntries(db,TBL_ME);
+        cv.put(COLUMN_ME, 0);
+
+        if(NoOfRows>0){
+            return;
+        }
+        else {
+            db.insert(TBL_ME,null,cv);
+        }
+    }
     public long insertUser(User u)
     {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -93,41 +183,37 @@ public class SQLDBHelper extends SQLiteOpenHelper {
         cv.put(COLUMN_PRIORITY,p.getPriority());
         cv.put(COLUMN_STATE,p.getState());
         cv.put(COLUMN_IO_INFORMATION,p.getIoInformation());
-
+        cv.put(COLUMN_INITIALIZED_BY,p.getInitializedBy());
 
         long id = db.insert(TBL_PROCESS,null,cv);
 
         return id;
     }
 
-    public int updatePassword(String oldPass, String newPass)
+    public void updateProcess(Process p, String newId, String newPriority, String newState, String newIoInformation,String newInitializedBy)
     {
         this.db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(COLUMN_PASSWORD,newPass);
-        String[] whereArgs = {oldPass};
-        int update = db.update(TBL_USERS, values, COLUMN_PASSWORD + "= ?",whereArgs);
 
-        return update;
-    }
-
-    public int updateProcess(String oldState, String newState,String oldIO, String newIO)
-    {
-        this.db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
         values.put(COLUMN_STATE,newState);
-        values.put(COLUMN_IO_INFORMATION,newIO);
-        String[] whereArgs = {oldState,oldIO};
-        int update = db.update(TBL_PROCESS, values, new String[]{COLUMN_STATE, COLUMN_IO_INFORMATION} + "= ?",whereArgs);
-
-        return update;
+        values.put(COLUMN_IO_INFORMATION,newIoInformation);
+        values.put(COLUMN_PRIORITY,newPriority);
+        values.put(COLUMN_PROCESS_ID,newId);
+        values.put(COLUMN_INITIALIZED_BY,newInitializedBy);
+        String[] whereArgs = {p.getId()};
+        db.update(TBL_PROCESS, values, COLUMN_PROCESS_ID + "= ?",whereArgs);
     }
 
-    public void deleteProcess(String processID)
+    public boolean deleteProcess(String processID)
     {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TBL_PROCESS, "PROCESS_ID=?", new String[]{processID});
+        return db.delete(TBL_PROCESS, "PROCESS_ID=?", new String[]{processID}) > 0;
 
+    }
+
+    public void deleteCurrentlyRunning (){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TBL_CURRENTLY_RUNNING, null, null);
     }
 
     public ArrayList<User> getAllUsers() {
@@ -167,6 +253,7 @@ public class SQLDBHelper extends SQLiteOpenHelper {
                 p.setPriority(cursor.getString( (int) cursor.getColumnIndex(COLUMN_PRIORITY)));
                 p.setState(cursor.getString((int)cursor.getColumnIndex(COLUMN_STATE)));
                 p.setIoInformation(cursor.getString((int)cursor.getColumnIndex(COLUMN_IO_INFORMATION)));
+                p.setInitializedBy(cursor.getString((int)cursor.getColumnIndex(COLUMN_INITIALIZED_BY)));
                 processList.add(p);
             } while (cursor.moveToNext());
         }
